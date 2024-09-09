@@ -1,0 +1,33 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>title</title>
+    <script src="{% static "js/script.js" %}"></script>
+    {% block css %}{% endblock css %}
+</head>
+<body>
+    <main id="main-content">
+        {% block content %}
+    <nav>
+        <h1>PONG</h1>
+        <div id="auth-container">
+            {% if request.user.is_authenticated %}
+            <p>welcome, {{ request.user.username }}! <a href="{% url "logout" %}" class="logout-link">Logout</a></p>
+            <a href="" class="nav-link" style="display: block;" >Play pong</a>
+            {% else %}
+            <a id="login" class="login" href="{% url "login" %}" class="nav-link" style="display: block;">Log In</a>
+            <a id="home" href="#" class="nav-link" style="display: block;">Log in 42</a>
+            <a href="#" class="nav-link" style="display: block;">Continue as guest</a>
+            {% endif %}
+        </div>
+    </nav>
+    
+        {% endblock content %}
+    </main>
+
+       
+</body>
+</html>

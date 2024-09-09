@@ -1,19 +1,19 @@
-{% extends "base.html" %}
+{% extends "index.html" %}
 {% load static %}
 
 {% block title %}Login{% endblock title %}
 
 {% block content %}
+
 <h2>Login</h2>
   
   <form id="login-form" method="post" data-url="{% url "login" %}">
     {% csrf_token %}
     {{ form.as_p }}
-    
-    <button type="submit">Login</button>
+    <button type="submit" class="login-button">Login</button>
   </form>
 
   <p>Do not have account? <a href="#">Register here</a></p>
+
   
-<script src="{% static 'js/login.js' %}"></script>
-{% endblock content %}
+  {% endblock content %}
