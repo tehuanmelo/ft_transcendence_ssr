@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', function () {
         event.preventDefault();
     
         if (event.target.matches('.login')) {
-            getLogin();
+            getPage();
         } else if (event.target.matches('.login-button')) {
             postLogin();
         } else if (event.target.matches('.logout-link')) {
@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', function () {
         event.preventDefault();
         
         if (event.target.matches('#login-form')) {
-            alert('submit detectado');
+            postLogin();
 
         }
     });
@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 });
 
-function getLogin() {
+function getPage() {
     fetch('users/login')
     .then(response => {
         if (!response.ok) throw new Error('Invalid response');
