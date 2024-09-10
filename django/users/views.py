@@ -4,10 +4,14 @@ from django.shortcuts import render
 from django.contrib.auth import logout
 from django.shortcuts import redirect
 
+from .forms import CustomUserCreationForm
+
+
 def login_view(request):
     if request.method == 'POST':
         form = AuthenticationForm(data=request.POST)
         print(request.POST)
+        
         if form.is_valid():
             user = form.get_user()
             login(request, user)
@@ -17,6 +21,21 @@ def login_view(request):
 
     return render(request, 'users/login.html', {'form': form})
 
+
 def logout_view(request):
     logout(request)
-    return redirect('home') 
+    return render(request, "pages/home.html") 
+
+
+def register_view(request):
+    if request.method == 'POST':
+        form = CustomUserCreationForm(data=request.POST)
+        
+        if form.is_valid():
+            form.save()
+            form = AuthenticationForm()
+            return render(request, "users/login.html", {'form': form})
+    else:
+        form = CustomUserCreationForm()
+        
+    return render(request, 'users/register.html', {'form': form})

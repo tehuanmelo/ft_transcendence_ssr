@@ -1,11 +1,14 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}Contact Page{% endblock title %}
+{% block title %}Contact{% endblock title %}
+
+{% block nav %}
+    {% include "includes/nav_menu.html" %}
+{% endblock nav %}
 
 {% block content %}
 
-{% include "pages/includes/nav_menu.html" %}
 
 <div class="p-5 mb-4 bg-body-tertiary rounded-3 border border-dark">
     <div class="container-fluid py-5">

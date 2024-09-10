@@ -15,10 +15,20 @@ document.addEventListener('DOMContentLoaded', function () {
                 postForm(formSelector, url);
             }
         }
-
     });
 
+    window.addEventListener('popstate', function(event) {
+        const url = document.location.pathname;
+        getPage(url);
+    })
+
 });
+
+function updateURL(url, title) {
+    history.pushState(null, title, url);
+    document.title = title;
+}
+
 
 function getPage(url) {
     fetch(url)
@@ -31,14 +41,20 @@ function getPage(url) {
         const parser = new DOMParser();
         const doc = parser.parseFromString(html, 'text/html');
         const newContent = doc.querySelector('#main-content').innerHTML;
+        const newTitlle = doc.querySelector('title').innerHTML;
+
         document.querySelector('#main-content').innerHTML = newContent;
+        document.title = newTitlle;
+        updateURL(url, newTitlle);
     })
     .catch(err => console.error('Error fetching the page', err.message));
 }
 
+
 function postForm(formSelector, url) {
     const form = document.querySelector(formSelector);
     const formData = new FormData(form);
+    const redirectUrl = form.getAttribute('data-redirect');
 
     fetch(url, {
         method: 'POST',
@@ -52,10 +68,16 @@ function postForm(formSelector, url) {
         return response.text();
     })
     .then(html => {
+        console.log(html);
         const parser = new DOMParser();
         const doc = parser.parseFromString(html, 'text/html');
         const newContent = doc.querySelector('#main-content').innerHTML;
+        const newTitlle = doc.querySelector('title').innerHTML;
+
         document.querySelector('#main-content').innerHTML = newContent;
+        document.title = newTitlle;
+
+        updateURL(redirectUrl, newTitlle);
     })
     .catch(error => {
         console.error('Login error:', error);
