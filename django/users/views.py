@@ -11,7 +11,7 @@ def login_view(request):
         if form.is_valid():
             user = form.get_user()
             login(request, user)
-            return render(request, "index.html")
+            return render(request, "pages/home.html")
     else:
         form = AuthenticationForm()
 
@@ -19,4 +19,4 @@ def login_view(request):
 
 def logout_view(request):
     logout(request)
-    return redirect('index') 
+    return redirect('home') 

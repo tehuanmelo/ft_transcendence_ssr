@@ -1,19 +1,21 @@
-{% extends "index.html" %}
+{% extends "base.html" %}
 {% load static %}
 
 {% block title %}Login{% endblock title %}
 
 {% block content %}
 
+
 <h2>Login</h2>
   
-  <form id="login-form" method="post" data-url="{% url "login" %}">
+  <form id="login-form">
     {% csrf_token %}
     {{ form.as_p }}
-    <button type="submit" class="login-button">Login</button>
+    <a class="btn btn-primary spa-link" href="{% url 'login' %}" data-method="POST" data-form="#login-form">Log In</a>
   </form>
 
   <p>Do not have account? <a href="#">Register here</a></p>
 
-  
-  {% endblock content %}
+
+
+{% endblock content %}

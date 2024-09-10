@@ -2,83 +2,56 @@ document.addEventListener('DOMContentLoaded', function () {
 
     document.body.addEventListener('click', function(event) {
         event.preventDefault();
-    
-        if (event.target.matches('.login')) {
-            getPage();
-        } else if (event.target.matches('.login-button')) {
-            postLogin();
-        } else if (event.target.matches('.logout-link')) {
-            getLogout();
+        const target = event.target;
+
+        if (target.matches('.spa-link')) {
+            const method = target.getAttribute('data-method');
+            const url = target.getAttribute('href');
+            const formSelector = target.getAttribute('data-form');
+
+            if (method === 'GET') {
+                getPage(url);
+            } else if (method === 'POST' && formSelector) {
+                postForm(formSelector, url);
+            }
         }
+
     });
-
-    document.addEventListener('submit', function (event) {
-        event.preventDefault();
-        
-        if (event.target.matches('#login-form')) {
-            postLogin();
-
-        }
-    });
-
 
 });
 
-function getPage() {
-    fetch('users/login')
+function getPage(url) {
+    fetch(url)
     .then(response => {
         if (!response.ok) throw new Error('Invalid response');
-        return response.text();
-    })
-    .then(html => {
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(html, 'text/html');
-        const newContent = doc.querySelector('#main-content').innerHTML;
-        document.querySelector('#main-content').innerHTML = newContent;
-    })
-    .catch(err => console.error('Error fetching the page', err.message));
-}
-
-
-
-function getLogout() {
-    fetch('users/logout')
-    .then(response => {
-        if (!response.ok) throw new Error('Invalid response');
-        return response.text();
-    })
-    .then(html => {
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(html, 'text/html');
-        const newContent = doc.querySelector('#main-content').innerHTML;
-        document.querySelector('#main-content').innerHTML = newContent;
-    })
-    .catch(err => console.error('Error fetching the page', err.message));
-}
-
-
-
-function postLogin() {
-    console.log('inside post login');
-    const form = document.querySelector('#login-form'); 
-
-    const formData = new FormData(form);
-
-
-    fetch('users/login/', {
-        method: 'POST',
-        headers: {
-            'X-CSRFToken': formData.get('csrfmiddlewaretoken') // Inclui o token CSRF
-        },
-        body: formData 
-    })
-    .then(response => {
-        if (!response.ok) throw new Error('Invalid response');
-        console.log(response);
         return response.text();
     })
     .then(html => {
         console.log(html);
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, 'text/html');
+        const newContent = doc.querySelector('#main-content').innerHTML;
+        document.querySelector('#main-content').innerHTML = newContent;
+    })
+    .catch(err => console.error('Error fetching the page', err.message));
+}
+
+function postForm(formSelector, url) {
+    const form = document.querySelector(formSelector);
+    const formData = new FormData(form);
+
+    fetch(url, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': formData.get('csrfmiddlewaretoken')
+        },
+        body: formData
+    })
+    .then(response => {
+        if (!response.ok) throw new Error('Invalid login post request');
+        return response.text();
+    })
+    .then(html => {
         const parser = new DOMParser();
         const doc = parser.parseFromString(html, 'text/html');
         const newContent = doc.querySelector('#main-content').innerHTML;
