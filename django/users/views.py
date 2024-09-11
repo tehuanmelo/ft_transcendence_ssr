@@ -23,8 +23,11 @@ def login_view(request):
 
 
 def logout_view(request):
-    logout(request)
-    return render(request, "pages/home.html") 
+    if request.method == 'POST':
+        logout(request)
+        return render(request, "pages/home.html")
+    else:
+        return render(request, "users/logout.html")
 
 
 def register_view(request):

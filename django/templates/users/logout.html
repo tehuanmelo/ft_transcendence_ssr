@@ -4,8 +4,11 @@
 {% block title %}Log Out{% endblock title %}
 
 {% block nav %}
-  <a href="{% url "home" %}" class="spa-link" data-method="GET">Back to home</a>
+    {% if user.is_authenticated %}
+        {% include "includes/nav_menu.html" %}
+    {% endif %}
 {% endblock nav %}
+
 
 {% block content %}
     <h1>Log Out</h1>
@@ -13,7 +16,7 @@
     <form id="logout-form" data-redirect="{% url "home" %}">
         {% csrf_token %}
         {{ form|crispy }}
-        <a class="btn btn-danger spa-link" href="{% url 'login' %}" data-method="POST" data-form="#logout-form">Log In</a>
+        <a class="btn btn-danger spa-link" href="{% url 'logout' %}" data-method="POST" data-form="#logout-form">Log out</a>
     </form>
 
 {% endblock content %}
